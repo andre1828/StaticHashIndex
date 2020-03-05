@@ -2,9 +2,10 @@ var words = ''
 var fileInput = document.querySelector("#arq")
 
 async function CriaTabela() {
-  words = await fileInput.files[0].text()  
+  words = await fileInput.files[0].text()
+  words = words.split("\n")
   console.log(words)
-  
+
   tam = 4;
   var table = document.getElementById("tabela");
   for (var i = 0; i < tam; i++) {
