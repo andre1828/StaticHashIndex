@@ -8,13 +8,28 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-  <input type="file" id="arq" multiple size="50" onchange="">
 
-  <table id="tabela">
-    </table>
+            <form action="">
+                <ul>
+                  <li><label>arquivo:</label></li>
+                    <li>  <input type="file" id="arq" multiple size="50" </li>
 
-  <button onclick="CriaTabela()">criar</button> 
-  
+
+
+                    <li><label>tamanho:</label></li>
+                    <li><input type="number" name="tamanho" id="tamanho">
+            
+					<input type="button" value="criar" id="criar" onclick="CriaTabela()">
+                    </li>
+                </ul>
+            </form>
+
+            
+		</div>	
+<table id="tabela">
+</table>
+
+
   
   
    <script src="script.js"></script>
