@@ -11,7 +11,7 @@ var tam =document.getElementById("tamanho").value;
 //document.getElementById("criar").disabled = true;
 var table= document.getElementById("tabela");
 
-for(var i=0;i<tam;i++){
+for(var i=0;i<words.length;i++){
 var row =table.insertRow(i);
 var coluna1=row.insertCell(0);
 coluna1.innerHTML = i;
