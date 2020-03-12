@@ -3,7 +3,7 @@ var words = '';
 words = carregarArquivo();
 
 async function CriaTabela() {
-  words = await fileInput.files[0].text();
+  
   words = words.split("\n");
 
 var tam =document.getElementById("tamanho").value;
