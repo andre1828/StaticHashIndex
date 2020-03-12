@@ -1,5 +1,6 @@
 var words = '';
-var fileInput = document.querySelector("#arq");
+// var fileInput = document.querySelector("#arq");
+words = carregarArquivo();
 
 async function CriaTabela() {
   words = await fileInput.files[0].text();
@@ -81,4 +82,15 @@ return k%m;
 
 }
 
+function carregarArquivo() {
+  let conteudoDoArquivo = '';
+  console.log("carregando arquivo...")
+  fetch("words.txt")
+    .then((response) => response.text())
+    .then((texto) => {
+       conteudoDoArquivo = texto;
+       console.log("arquivo carregado");
+    })
 
+  return conteudoDoArquivo
+}
