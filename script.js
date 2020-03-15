@@ -1,10 +1,8 @@
 var words = ""
 // var fileInput = document.querySelector("#arq");
-words = carregarArquivo()
+carregarArquivo().then(result => (words = result))
 
-async function CriaTabela() {
-  words = words.split("\r\n")
-  console.log(words.length)
+function CriaTabela() {
 
   var tam = document.getElementById("tamanho").value
 
@@ -65,16 +63,14 @@ function hash(k) {
   //usar o conjunto set
 }
 
-function carregarArquivo() {
+async function carregarArquivo() {
   let conteudoDoArquivo = ""
   console.log("carregando arquivo...")
-  fetch("words.txt")
-    .then(response => response.text())
-    .then(texto => {
-      conteudoDoArquivo = texto
-      console.log("arquivo carregado")
-    })
-
+  conteudoDoArquivo = await fetch("words.txt")
+  conteudoDoArquivo = await conteudoDoArquivo.text()
+  conteudoDoArquivo = conteudoDoArquivo.split("\r\n")
+  document.querySelector("#criarTabela").disabled = false
+  console.log("arquivo carregado")
   return conteudoDoArquivo
 }
 
