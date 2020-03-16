@@ -1,12 +1,16 @@
+const worker = new Worker("worker.js")
 var words = ""
 // var fileInput = document.querySelector("#arq");
 carregarArquivo().then(result => (words = result))
+
+function CriarTabelaWorker(){
+  worker.postMessage(words)
+}
 
 function CriaTabela() {
 
   var tam = document.getElementById("tamanho").value
 
-  //document.getElementById("criar").disabled = true;
   var table = document.getElementById("tabela")
 
   var tablehash = document.getElementById("tabelahash")
@@ -72,6 +76,10 @@ async function carregarArquivo() {
   document.querySelector("#criarTabela").disabled = false
   console.log("arquivo carregado")
   return conteudoDoArquivo
+}
+
+worker.onmessage = function(e) {
+  console.log(e)
 }
 
 /*
