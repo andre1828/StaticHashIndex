@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>repl.it</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-
-            <form action="">
-                <ul>
-             <!--     <li><label>arquivo:</label></li>
+    <form action="">
+      <ul>
+        <!--     <li><label>arquivo:</label></li>
                     <li>  <input type="file" id="arq" multiple size="50" </li>-->
 
-                    <li><label>tamanho da pagina:</label></li>
-                    <li><input type="number" name="tamanho" id="tamanho">
-            
-					<input disabled="true" type="button" value="criar" id="criarTabela" onclick="CriarTabelaWorker()">
-          	
-                    </li>
-                </ul>
-            </form>
+        <li><label>tamanho da pagina:</label></li>
+        <li>
+          <input type="number" name="tamanho" id="tamanho" />
 
-            
-		</div>	
+          <input
+            disabled="true"
+            type="button"
+            value="criar"
+            id="createTableBtn"
+          />
+        </li>
+      </ul>
+    </form>
+
     <p>tabela</p>
-<table id="tabela">
-   
-</table></table>
+    <table id="tabela"></table>
 
-<p>tabela hash</p>
-      <table id="tabelahash">
-</table>
-  
-  
-   <script type="module" src="script.js"></script>
-   <script type="module" src="Page.js"></script>
+    <p>tabela hash</p>
+    <table id="tabelahash"></table>
+
+    <script type="module" src="script.js"></script>
   </body>
 </html>
