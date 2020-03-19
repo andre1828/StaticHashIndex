@@ -1,10 +1,12 @@
 const worker = new Worker("worker.js")
 import Tuple from "./Tuple.js"
 import Table from "./Table.js"
+import Page from "./Page.js"
 const createTableBtn = document.querySelector("#createTableBtn")
 createTableBtn.addEventListener("click", createInitialState)
 var words = ""
 var table
+var pages
 
 // obter informacoes do usuario
 // criar estado inicial
@@ -12,6 +14,7 @@ function createInitialState() {
   // criar tabela
   table = createTable()
   // criar paginas
+  pages = createPages(1000, null, table)
   // criar buckets
 }
 
@@ -53,6 +56,33 @@ function createTable() {
 
   // criar tabela
   return new Table(tuples)
+}
+
+function createPages(numOfPages, pageLength, table) {
+  let pages = []
+  let pageIDs = []
+
+  if (numOfPages) {
+    pageLength = Math.floor(words.length / numOfPages)
+  } else {
+    numOfPages = Math.floor(words.length / pageLength)
+  }
+
+  for (let i = 0; i < numOfPages; i++) {
+    pageIDs.push(i + 1)
+  }
+  
+  shuffleArray(pageIDs)
+
+  let tableCopy = table.tuples
+
+  shuffleArray(tableCopy)
+
+  // TODO distribute tuples between pages
+
+  for (let j = 0; j < numOfPages; j++) {
+    pages.push(new Page())
+  }
 }
 
 function shuffleArray(array) {
