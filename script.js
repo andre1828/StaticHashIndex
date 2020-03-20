@@ -71,18 +71,24 @@ function createPages(numOfPages, pageLength, table) {
   for (let i = 0; i < numOfPages; i++) {
     pageIDs.push(i + 1)
   }
-  
+
   shuffleArray(pageIDs)
 
   let tableCopy = table.tuples
 
   shuffleArray(tableCopy)
 
-  // TODO distribute tuples between pages
+  var sliceBegin = 0
+  var sliceEnd = pageLength
 
   for (let j = 0; j < numOfPages; j++) {
-    pages.push(new Page())
+    var chunk = tableCopy.slice(sliceBegin, sliceEnd)
+    pages.push(new Page(pageIDs[j], chunk))
+    sliceBegin = sliceEnd
+    sliceEnd += pageLength
   }
+
+  return pages
 }
 
 function shuffleArray(array) {
