@@ -11,11 +11,13 @@ var pages
 // obter informacoes do usuario
 // criar estado inicial
 function createInitialState() {
+  var hashes = words.map(hash)
   // criar tabela
   table = createTable()
   // criar paginas
   pages = createPages(1000, null, table)
   // criar buckets
+  // buckets = createBuckets(pages)
 }
 
 loadWords().then(result => (words = result))
@@ -91,9 +93,40 @@ function createPages(numOfPages, pageLength, table) {
   return pages
 }
 
+function createBuckets(pages) {
+  // num of buckets = num of tuples / max num of tuples per bucket (depends on hash)
+}
+
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     ;[array[i], array[j]] = [array[j], array[i]]
   }
+}
+
+function hash(key) {
+  var charCodeArray = toAscCode(key)
+  return charCodeArray.reduce(
+    (prev, cur, curIndex) => (prev * cur * (curIndex + 1)) >> curIndex
+  )
+}
+
+function toAscCode(word) {
+  return word.split("").map(char => char.charCodeAt(0))
+}
+
+function calculateCollisionRate(hashes) {
+  // var collisions = new Map()
+  // for (let i = 0, j = 1; i < hashes.length; ) {
+  //   if (hashes[i] === hashes[j]) {
+  //     collisions.set(i, (collisions.get(i) | 0) + 1)
+  //   }
+  //   if (j === hashes.length - 1) {
+  //     i, (j = 0)
+  //   } else {
+  //     j++
+  //   }
+  // }
+
+  return new Set(hashes)
 }
