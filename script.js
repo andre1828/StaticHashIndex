@@ -1,4 +1,4 @@
-const worker = new Worker("worker.js")
+// const worker = new Worker("worker.js")
 import Tuple from "./Tuple.js"
 import Table from "./Table.js"
 import Page from "./Page.js"
@@ -11,13 +11,12 @@ var pages
 // obter informacoes do usuario
 // criar estado inicial
 function createInitialState() {
-  var hashes = words.map(hash)
   // criar tabela
   table = createTable()
   // criar paginas
   pages = createPages(1000, null, table)
   // criar buckets
-  // buckets = createBuckets(pages)
+  buckets = createBuckets(pages)
 }
 
 loadWords().then(result => (words = result))
@@ -93,7 +92,8 @@ function createPages(numOfPages, pageLength, table) {
   return pages
 }
 
-function createBuckets(pages) {
+function createBuckets(pages, table) {
+  var hashes = table.tuples.map(tuple => tuple.searchKey).map(sdbmHash)
   // num of buckets = num of tuples / max num of tuples per bucket (depends on hash)
 }
 
@@ -111,11 +111,22 @@ function hash(key) {
   )
 }
 
+function sdbmHash(key) {
+  key = key + ""
+  var hash = 5381 | 0
+  key = toAscCode(key)
+  for (let i = 0; i < key.length; i++) {
+    hash = key[i] + (hash << 6) + (hash << 16) - hash
+  }
+
+  return hash >>> 0
+}
+
 function toAscCode(word) {
   return word.split("").map(char => char.charCodeAt(0))
 }
 
-function calculateCollisionRate(hashes) {
+function calculateNumOfCollisions(hashes) {
   // var collisions = new Map()
   // for (let i = 0, j = 1; i < hashes.length; ) {
   //   if (hashes[i] === hashes[j]) {
@@ -127,6 +138,5 @@ function calculateCollisionRate(hashes) {
   //     j++
   //   }
   // }
-
-  return new Set(hashes)
+  return hashes.length - new Set(hashes).size
 }
