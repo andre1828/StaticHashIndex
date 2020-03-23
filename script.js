@@ -1,4 +1,3 @@
-// const worker = new Worker("worker.js")
 import Utils from "./Utils.js"
 import Tuple from "./Tuple.js"
 import Table from "./Table.js"
@@ -21,10 +20,6 @@ function createIndex() {
 }
 
 loadWords().then(result => (words = result))
-
-function CriarTabelaWorker() {
-  worker.postMessage(words)
-}
 
 async function loadWords() {
   let fileContent = ""
