@@ -1,5 +1,6 @@
 export default {
   shuffleArray(array) {
+    //https://stackoverflow.com/a/12646864
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[array[i], array[j]] = [array[j], array[i]]
@@ -11,7 +12,7 @@ export default {
   sdbmHash(key) {
     key = key + ""
     var hash = 5381 | 0
-    key = toAscCode(key)
+    key = this.toAscCode(key)
     for (let i = 0; i < key.length; i++) {
       hash = key[i] + (hash << 6) + (hash << 16) - hash
     }
