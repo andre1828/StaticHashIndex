@@ -104,13 +104,6 @@ function shuffleArray(array) {
   }
 }
 
-function hash(key) {
-  var charCodeArray = toAscCode(key)
-  return charCodeArray.reduce(
-    (prev, cur, curIndex) => (prev * cur * (curIndex + 1)) >> curIndex
-  )
-}
-
 function sdbmHash(key) {
   key = key + ""
   var hash = 5381 | 0
