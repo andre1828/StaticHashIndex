@@ -11,7 +11,7 @@ var pages
 
 // obter informacoes do usuario
 // criar estado inicial
-function createInitialState() {
+function createIndex() {
   // criar tabela
   table = createTable()
   // criar paginas
