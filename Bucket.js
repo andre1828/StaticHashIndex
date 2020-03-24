@@ -1,5 +1,6 @@
 export default class Bucket {
-  constructor(entries) {
+  constructor(id, entries) {
+    this.id = id
     this.entries = entries
   }
 
