@@ -2,12 +2,13 @@ import Utils from "./Utils.js"
 import Tuple from "./Tuple.js"
 import Table from "./Table.js"
 import Page from "./Page.js"
+import Bucket from "./Bucket.js"
 const createTableBtn = document.querySelector("#createTableBtn")
-createTableBtn.addEventListener("click", createInitialState)
+createTableBtn.addEventListener("click", createIndex)
 var words = ""
 var table
 var pages
-
+var buckets
 // obter informacoes do usuario
 // criar estado inicial
 function createIndex() {
@@ -16,7 +17,7 @@ function createIndex() {
   // criar paginas
   pages = createPages(1000, null, table)
   // criar buckets
-  buckets = createBuckets(pages)
+  buckets = createBuckets(pages, table)
 }
 
 loadWords().then(result => (words = result))
@@ -85,7 +86,29 @@ function createPages(numOfPages, pageLength, table) {
 }
 
 function createBuckets(pages, table) {
-  var hashes = table.tuples.map(tuple => tuple.searchKey).map(Utils.sdbmHash)
-  // num of buckets = num of tuples / max num of tuples per bucket (depends on hash)
+  var pageLength = pages[0].length
+  var hashes = table.tuples
+    .map(tuple => tuple.searchKey)
+    .map(searchKey => {
+      return { searchKey, hash: Utils.sdbmHash(searchKey) }
+    })
+  var collisions = Utils.calculateNumOfCollisions(hashes.map(obj => obj.hash))
+  var bucketLength
+  if (collisions) {
+    bucketLength = words.length / (words.length - collisions)
+  } else {
+    bucketLength = 1 // words.length / words.length
+  }
+
+  // num of buckets > num of tuples / max num of tuples per bucket (depends on hash)
+  var numOfBuckets = words.length / bucketLength
+
+  for (let i = 0; i < numOfBuckets; i++) {
+    // for each hash, create a bucket
+    
+  }
 }
 
+function createHashMap(keys) {
+  //TODO create map of Hash -> array of keys
+}
