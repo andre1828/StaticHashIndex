@@ -11,7 +11,7 @@ export default {
   sdbmHash(key) {
     key = key + ""
     var hash = 5381 | 0
-    key = toAscCode(key)
+    key = key.split("").map(char => char.charCodeAt(0))
     for (let i = 0; i < key.length; i++) {
       hash = key[i] + (hash << 6) + (hash << 16) - hash
     }
