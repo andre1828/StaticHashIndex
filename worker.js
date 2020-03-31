@@ -1,21 +1,28 @@
 onmessage = function(e) {
-  let words = e.data
-  var keys = new Array()
-  var hashv = new Array()
-  var tab = new Object()
+  let hashes = e.data
 
-  for (var j = 0; j < words.length; j++) {
-    var p = Math.floor(Math.random() * words.length)
+  var collisions = new Map()
+  new Set(hashes).forEach(hash => !hash || collisions.set(hash, 0))
 
-    if (!keys.includes(p)) {
-      keys[j] = p
-    } else {
-      j--
+  for (let [hash, count] of collisions) {
+    for (let i = 0; i < hashes.length; i++) {
+      if (hashes[i] === hash) {
+        collisions.set(hash, collisions.get(hash) + 1)
+      }
     }
   }
 
-  tab.key = keys
-  tab.tupla = words
+  let greaterCount = 0
+  let smallerCount = 1
+  for (let [hash, count] of collisions) {
+    if (count > greaterCount) {
+      greaterCount = count
+    }
 
-  this.postMessage(tab)
+    if (count < smallerCount) {
+      smallerCount = count
+    }
+  }
+
+  this.postMessage({collisions, greaterCount, smallerCount})
 }
