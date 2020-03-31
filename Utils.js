@@ -18,6 +18,15 @@ export default {
 
     return hash >>> 0
   },
+  modHash(key) {
+    const m = 999959
+    const ascCodeKey = (key + "")
+      .split("")
+      .map(char => char.charCodeAt(0))
+      .reduce((prev, curr) => prev + curr)
+    const hash = ascCodeKey % m
+    return hash
+  },
   calculateNumOfCollisions(hashes) {
     // var collisions = new Map()
     // for (let i = 0, j = 1; i < hashes.length; ) {
@@ -31,5 +40,20 @@ export default {
     //   }
     // }
     return hashes.length - new Set(hashes).size
+  },
+
+  createCollisionMap(hashes) {
+    var collisions = new Map()
+    new Set(hashes).forEach(hash => !hash || collisions.set(hash, 0))
+
+    for (let [hash, count] of collisions) {
+      for (let i = 0; i < hashes.length; i++) {
+        if (hashes[i] === hash) {
+          collisions.set(hash, collisions.get(hash) + 1)
+        }
+      }
+    }
+
+    return collisions
   }
 }
