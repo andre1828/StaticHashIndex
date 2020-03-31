@@ -1,3 +1,4 @@
+var worker = new Worker("./Worker.js")
 import Utils from "./Utils.js"
 import Tuple from "./Tuple.js"
 import Table from "./Table.js"
@@ -12,12 +13,23 @@ var buckets
 // obter informacoes do usuario
 // criar estado inicial
 function createIndex() {
+  let numbers = []
+  for (let i = 0; i <= 466550; i++) {
+    numbers[i] = i + 1
+  }
+  var hashes = numbers.map(Utils.modHash)
+  worker.postMessage(hashes)
+  return
   // criar tabela
   table = createTable()
   // criar paginas
   pages = createPages(1000, null, table)
   // criar buckets
   buckets = createBuckets(pages, table)
+}
+
+worker.onmessage = function(e) {
+  console.log(e.data)
 }
 
 loadWords().then(result => (words = result))
