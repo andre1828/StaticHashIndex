@@ -11,15 +11,8 @@ var table
 var pages
 var buckets
 // obter informacoes do usuario
-// criar estado inicial
+// criar indice
 function createIndex() {
-  let numbers = []
-  for (let i = 0; i <= 466550; i++) {
-    numbers[i] = i + 1
-  }
-  var hashes = numbers.map(Utils.modHash)
-  worker.postMessage(hashes)
-  return
   // criar tabela
   table = createTable()
   // criar paginas
@@ -102,22 +95,16 @@ function createBuckets(pages, table) {
   var hashes = table.tuples
     .map(tuple => tuple.searchKey)
     .map(searchKey => {
-      return { searchKey, hash: Utils.sdbmHash(searchKey) }
+      return { searchKey, hash: new Set(Utils.sdbmHash(searchKey)) } // TODO implement hash function
     })
-  var collisions = Utils.calculateNumOfCollisions(hashes.map(obj => obj.hash))
-  var bucketLength
-  if (collisions) {
-    bucketLength = words.length / (words.length - collisions)
-  } else {
-    bucketLength = 1 // words.length / words.length
-  }
+  var buckets = []
+  var bucketLength = hashes.length
 
   // num of buckets > num of tuples / max num of tuples per bucket (depends on hash)
-  var numOfBuckets = words.length / bucketLength
+  var numOfBuckets = table.tuples.length / bucketLength
 
   for (let i = 0; i < numOfBuckets; i++) {
     // for each hash, create a bucket
-    
   }
 }
 
