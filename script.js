@@ -21,11 +21,11 @@ function createIndex() {
   buckets = createBuckets(pages, table)
 }
 
-worker.onmessage = function(e) {
+worker.onmessage = function (e) {
   console.log(e.data)
 }
 
-loadWords().then(result => (words = result))
+loadWords().then((result) => (words = result))
 
 async function loadWords() {
   let fileContent = ""
@@ -91,23 +91,47 @@ function createPages(numOfPages, pageLength, table) {
 }
 
 function createBuckets(pages, table) {
-  var pageLength = pages[0].length
-  var hashes = table.tuples
-    .map(tuple => tuple.searchKey)
-    .map(searchKey => {
-      return { searchKey, hash: new Set(Utils.sdbmHash(searchKey)) } // TODO implement hash function
-    })
+  var hashKeyMap = createHashMap(table)
+
   var buckets = []
-  var bucketLength = hashes.length
+  var bucketLength = hashKeyMap.length
 
   // num of buckets > num of tuples / max num of tuples per bucket (depends on hash)
   var numOfBuckets = table.tuples.length / bucketLength
 
-  for (let i = 0; i < numOfBuckets; i++) {
+  for (let [hash, searchkeys] in hashKeyMap.length) {
     // for each hash, create a bucket
+
+    var filteredPage = pages.filter((page) =>
+      page.tuples.some((tuple) => {
+        searchkeys.includes(tuple.searchKey)
+      })
+    )
   }
+  buckets.push(
+    new Bucket(keyHashMap[i].hash, { wordId: keyHashMap[i].searchKey })
+  )
 }
 
-function createHashMap(keys) {
-  //TODO create map of Hash -> array of keys
+function createHashMap(table) {
+  var keyHashObjArray = table.tuples
+    .map((tuple) => tuple.searchKey)
+    .map((searchKey) => {
+      return { searchKey, hash: Utils.modHash(searchKey) }
+    })
+
+  var uniqueHashes = Array.from(new Set(keyHashObjArray.map((obj) => obj.hash)))
+  var hashKeyMap = new Map()
+  uniqueHashes.map((hash) => hashKeyMap.set(hash, []))
+  uniqueHashes.forEach((hash) => {
+    keyHashObjArray.forEach((obj) => {
+      if (obj.hash === hash) {
+        var keys = hashKeyMap.get(hash)
+        keys.push(obj.searchKey)
+        hashKeyMap.set(hash, keys)
+      }
+    })
+  })
+
+  return hashKeyMap
 }
