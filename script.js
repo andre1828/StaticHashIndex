@@ -99,15 +99,25 @@ function createBuckets(pages, table) {
   // num of buckets > num of tuples / max num of tuples per bucket (depends on hash)
   var numOfBuckets = table.tuples.length / bucketLength
 
-  for (let [hash, searchkeys] in hashKeyMap.length) {
+  var tuples = [`${pages[0].address}`]
+  for (let i = 0; i < pages.length; i++) {
+    pages[i].tuples.map((tuple) => tuples.push(tuple))
+    if (pages[i + 1] !== undefined) tuples.push(`${pages[i + 1].address}`)
+  }
+
+  for (let [hash, searchkeys] of hashKeyMap.entries()) {
     // for each hash, create a bucket
 
-    var filteredPage = pages.filter((page) =>
-      page.tuples.some((tuple) => {
-        searchkeys.includes(tuple.searchKey)
-      })
-    )
+    // var filteredPage = pages.filter((page) =>
+    //   page.tuples.some((tuple) => {
+    //     searchkeys.includes(tuple.searchKey)
+    //   })
+    // )
+    for (let i = 0, page = 1; i < tuples.length; i++) {
+      
+    }
   }
+  debugger
   buckets.push(
     new Bucket(keyHashMap[i].hash, { wordId: keyHashMap[i].searchKey })
   )
