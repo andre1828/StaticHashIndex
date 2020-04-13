@@ -5,6 +5,7 @@ import Table from "./Table.js"
 import Page from "./Page.js"
 import Bucket from "./Bucket.js"
 const createTableBtn = document.querySelector("#createTableBtn")
+
 const mostraTabelas = document.querySelector("#mostraTabela")
 const mostraTabelapagina = document.querySelector("#mostraTabelapaginas")
 
@@ -12,15 +13,19 @@ createTableBtn.addEventListener("click", createIndex)
 mostraTabelas.addEventListener("click", mostraTabela)
 mostraTabelapagina.addEventListener("click", mostraTabelapaginas)
 
+createTableBtn.addEventListener("click", createIndex)
+
 var words = ""
 var table
 var pages
 var buckets
+
 var numb=[]
 var tab=[]
 var pgid=[]
 var pagTid=[]
 var pag=[]
+
 // obter informacoes do usuario
 // criar indice
 function createIndex() {
@@ -29,13 +34,11 @@ function createIndex() {
   // criar paginas
   pages = createPages(1000, null, table)
   // criar buckets
-  //buckets = createBuckets(pages, table)
-}
 
-worker.onmessage = function (e) {
-  console.log(e.data)
+  buckets = createBuckets(pages, table)
 }
 loadWords().then((result) => (words = result))
+
 
 
 async function loadWords() {
@@ -156,8 +159,66 @@ i++;
 
  }
   }
+  
+worker.onmessage = function (e) {
+  console.log(e.data)
+}
+
+loadWords().then((result) => (words = result))
+
+async function loadWords() {
+  let fileContent = ""
+  console.log("carregando arquivo...")
+  fileContent = await fetch("words.txt")
+  fileContent = await fileContent.text()
+  fileContent = fileContent.split("\r\n")
+  document.querySelector("#createTableBtn").disabled = false
+  console.log("arquivo carregado")
+  return fileContent
+}
+
+function createTable() {
+  // criar chaves de busca
+  let numbers = []
+  let tuples = []
+  for (let i = 0; i <= 466550; i++) {
+    numbers[i] = i + 1
+  }
+
+  Utils.shuffleArray(numbers)
+
+  // criar tuplas
+  for (let j = 0; j < numbers.length; j++) {
+    tuples.push(new Tuple(numbers[j], words[j]))
+  }
+
+  // criar tabela
+  return new Table(tuples)
+}
+
+function createPages(numOfPages, pageLength, table) {
+  let pages = []
+  let pageIDs = []
+
+  if (numOfPages) {
+    pageLength = Math.floor(words.length / numOfPages)
+  } else {
+    numOfPages = Math.floor(words.length / pageLength)
+  }
+
+  for (let i = 0; i < numOfPages; i++) {
+    pageIDs.push(i + 1)
+  }
+
+  Utils.shuffleArray(pageIDs)
+
+  let tableCopy = table.tuples
 
 
+  Utils.shuffleArray(tableCopy)
+
+  var sliceBegin = 0
+  var sliceEnd = pageLength
 
 console.log("------------------------------------------")
 
@@ -211,6 +272,8 @@ console.log("------------------------------------------")
 
 function createBuckets(pages, table) {
   console.log("---------------createBuckets----------------")
+
+
   var hashKeyMap = createHashMap(table)
 
   var buckets = []
@@ -238,15 +301,13 @@ function createBuckets(pages, table) {
     }
   }
   debugger
- buckets.push(
+
+  buckets.push(
     new Bucket(keyHashMap[i].hash, { wordId: keyHashMap[i].searchKey })
   )
-console.log("------------------------------------------")
 }
 
 function createHashMap(table) {
-
-   
   var keyHashObjArray = table.tuples
     .map((tuple) => tuple.searchKey)
     .map((searchKey) => {
