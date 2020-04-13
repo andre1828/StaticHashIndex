@@ -1,3 +1,31 @@
-table, th, td {
+
+
+html, body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+}
+.header {
+  height: 64px;
+  background-color: lightblue;
+  flex-shrink: 0;
+}
+div{
+
+  
+  //overflow: scroll;
+  height: 300px;
   border: 1px solid black;
+
+}
+table{
+   display: block;
+  height: 300px;
+  border: 1px solid black;
+
+}
+td, th {
+border: 1px solid black;
+width : 25%;
+
 }

@@ -1,40 +1,50 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Static hash index</title>
 
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-
-            <form action="">
-                <ul>
-             <!--     <li><label>arquivo:</label></li>
+    <form action="">
+      <ul>
+        <!--     <li><label>arquivo:</label></li>
                     <li>  <input type="file" id="arq" multiple size="50" </li>-->
 
-                    <li><label>tamanho da pagina:</label></li>
-                    <li><input type="number" name="tamanho" id="tamanho">
-            
-					<input type="button" value="criar" id="criar tabela" onclick="CriaTabela()">
-          	
-                    </li>
-                </ul>
-            </form>
+        <li><label>tamanho da pagina:</label></li>
+        <li>
+          <input type="number" name="tamanho" id="tamanho" />
 
-            
-		</div>	
-    <p>tabela</p>
-<table id="tabela">
+          <input disabled="true" type="button" value="criar" id="createTableBtn"/>
+        </li>
+        <li>
+             <input disabled="true" type="button" value="criar tabela" id="mostraTabela"/>
+        </li>
+         <li>
+             <input disabled="true" type="button" value="criar tabela paginas" id="mostraTabelapaginas"/>
+        </li>
+      </ul>
+    </form>
+         <p>Tabela teste</p>
+<div>
    
-</table></table>
+    <table id="tabelateste"></table>
+</div>
+     <p>Tabela completa</p>
+<div>
+   
+    <table id="tabela"></table>
+</div>
+     <p>Tabela Paginas</p>
+<div>
+   
+    <table id="tabelaPaginas"></table>
+</div>
+    <p>tabela hash</p>
+    <table id="tabelahash"></table>
 
-<p>tabela hash</p>
-      <table id="tabelahash">
-</table>
-  
-  
-   <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
