@@ -19,6 +19,7 @@ export default {
     return hash >>> 0
   },
   modHash(key) {
+
     const m = 999959
     const ascCodeKey = (key + "")
       .split("")
@@ -28,6 +29,7 @@ export default {
     return hash
   },
   calculateNumOfCollisions(hashes) {
+
     // var collisions = new Map()
     // for (let i = 0, j = 1; i < hashes.length; ) {
     //   if (hashes[i] === hashes[j]) {
@@ -39,6 +41,7 @@ export default {
     //     j++
     //   }
     // }
+
     return hashes.length - new Set(hashes).size
   },
 
