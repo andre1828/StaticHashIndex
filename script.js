@@ -94,33 +94,73 @@ function createBuckets(pages, table) {
   var hashKeyMap = createHashMap(table)
 
   var buckets = []
-  var bucketLength = hashKeyMap.length
+  // var bucketLength = hashKeyMap.length
 
   // num of buckets > num of tuples / max num of tuples per bucket (depends on hash)
-  var numOfBuckets = table.tuples.length / bucketLength
+  // var numOfBuckets = table.tuples.length / bucketLength
 
-  var tuples = [`${pages[0].address}`]
+  // create array with all tuples
+  // var flatTuples = [`${pages[0].address}`]
+  // for (let i = 0; i < pages.length; i++) {
+  //   pages[i].tuples.map((tuple) => flatTuples.push(tuple))
+  //   if (pages[i + 1] !== undefined) flatTuples.push(`${pages[i + 1].address}`)
+  // }
+
+  // create map with all tuples
+  var flatTuplesMap = []
   for (let i = 0; i < pages.length; i++) {
-    pages[i].tuples.map((tuple) => tuples.push(tuple))
-    if (pages[i + 1] !== undefined) tuples.push(`${pages[i + 1].address}`)
+    pages[i].tuples.forEach((tuple) =>
+      flatTuplesMap.push(pages[i].address, tuple)
+    )
   }
 
-  for (let [hash, searchkeys] of hashKeyMap.entries()) {
-    // for each hash, create a bucket
+  // create array with all searchKeys
+  var flatSearchKeys = []
+  for (let [hash, searchKeys] of hashKeyMap.entries()) {
+    flatSearchKeys.push(hash + "", ...searchKeys)
+  }
 
-    // var filteredPage = pages.filter((page) =>
-    //   page.tuples.some((tuple) => {
-    //     searchkeys.includes(tuple.searchKey)
-    //   })
-    // )
-    for (let i = 0, page = 1; i < tuples.length; i++) {
-      
+  for (let i = 0, hash = 0, page = null; i < flatSearchKeys.length; i++) {
+    let bucketEntries = []
+
+    if (typeof flatSearchKeys[i] === "string") {
+      hash = flatSearchKeys[i] | 0
+      i++
     }
+
+    let count = 0
+    for (let j = 0; j < flatTuplesMap.length; j++) {
+      count++
+      if (flatSearchKeys[i] === flatTuplesMap[j].searchKey) {
+        if (page === null) page = flatTuplesMap[j].page
+        if(page !== flatTuplesMap[j].page) break
+        bucketEntries.push({
+          page: flatTuplesMap[j].page,
+          searchKey: flatTuplesMap[j].searchKey,
+        })
+      }
+    }
+
+    // buckets.push(new Bucket(hash, bucketEntries))
   }
   debugger
-  buckets.push(
-    new Bucket(keyHashMap[i].hash, { wordId: keyHashMap[i].searchKey })
-  )
+  // for (let [hash, searchkeys] of hashKeyMap.entries()) {
+  //   // for each hash, create a bucket
+
+  //   // var filteredPage = pages.filter((page) =>
+  //   //   page.tuples.some((tuple) => {
+  //   //     searchkeys.includes(tuple.searchKey)
+  //   //   })
+  //   // )
+  //   for (let i = 0, page = 1; i < tuples.length; i++) {}
+  // }
+
+  // buckets.push(
+  //   new Bucket(keyHashMap[i].hash, {
+  //     wordId: keyHashMap[i].searchKey,
+  //     pageId: null,
+  //   })
+  // )
 }
 
 function createHashMap(table) {
