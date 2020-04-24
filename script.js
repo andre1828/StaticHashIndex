@@ -25,7 +25,7 @@ worker.onmessage = function (e) {
   console.log(e.data)
 }
 
-loadWords().then((result) => (words = result))
+loadWords().then(result => (words = result))
 
 async function loadWords() {
   let fileContent = ""
@@ -109,7 +109,7 @@ function createBuckets(pages, table) {
   // create map with all tuples
   var flatTuplesMap = []
   for (let i = 0; i < pages.length; i++) {
-    pages[i].tuples.forEach((tuple) =>
+    pages[i].tuples.forEach(tuple =>
       flatTuplesMap.push(pages[i].address, tuple)
     )
   }
@@ -128,9 +128,7 @@ function createBuckets(pages, table) {
       i++
     }
 
-    let count = 0
     for (let j = 0; j < flatTuplesMap.length; j++) {
-      count++
       if (flatSearchKeys[i] === flatTuplesMap[j].searchKey) {
         if (page === null) page = flatTuplesMap[j].page
         if(page !== flatTuplesMap[j].page) break
@@ -143,38 +141,20 @@ function createBuckets(pages, table) {
 
     // buckets.push(new Bucket(hash, bucketEntries))
   }
-  debugger
-  // for (let [hash, searchkeys] of hashKeyMap.entries()) {
-  //   // for each hash, create a bucket
-
-  //   // var filteredPage = pages.filter((page) =>
-  //   //   page.tuples.some((tuple) => {
-  //   //     searchkeys.includes(tuple.searchKey)
-  //   //   })
-  //   // )
-  //   for (let i = 0, page = 1; i < tuples.length; i++) {}
-  // }
-
-  // buckets.push(
-  //   new Bucket(keyHashMap[i].hash, {
-  //     wordId: keyHashMap[i].searchKey,
-  //     pageId: null,
-  //   })
-  // )
 }
 
 function createHashMap(table) {
   var keyHashObjArray = table.tuples
-    .map((tuple) => tuple.searchKey)
-    .map((searchKey) => {
-      return { searchKey, hash: Utils.modHash(searchKey) }
+    .map(tuple => tuple.searchKey)
+    .map(searchKey => {
+      return { searchKey, hash: Utils.divisionHash(searchKey) }
     })
 
-  var uniqueHashes = Array.from(new Set(keyHashObjArray.map((obj) => obj.hash)))
+  var uniqueHashes = Array.from(new Set(keyHashObjArray.map(obj => obj.hash)))
   var hashKeyMap = new Map()
-  uniqueHashes.map((hash) => hashKeyMap.set(hash, []))
-  uniqueHashes.forEach((hash) => {
-    keyHashObjArray.forEach((obj) => {
+  uniqueHashes.map(hash => hashKeyMap.set(hash, []))
+  uniqueHashes.forEach(hash => {
+    keyHashObjArray.forEach(obj => {
       if (obj.hash === hash) {
         var keys = hashKeyMap.get(hash)
         keys.push(obj.searchKey)

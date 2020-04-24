@@ -27,6 +27,10 @@ export default {
     const hash = ascCodeKey % m
     return hash
   },
+  divisionHash(key) {
+    key = key | 0
+    return Math.floor(key / 1000)
+  },
   calculateNumOfCollisions(hashes) {
     // var collisions = new Map()
     // for (let i = 0, j = 1; i < hashes.length; ) {
